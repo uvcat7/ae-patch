@@ -55,5 +55,5 @@ This file will rebuild GAME_PATCH.DAT and INFO_PATCH.DAT, using only the /data a
 
 ## 05_Patch_Game.py
 This script will copy GAME_PATCH.DAT and INFO_PATCH.DAT back to your Steam folder and start TGM4.
-The unmodified GAME.DAT and INFO.DAT will still be in this folder.
+The unmodified GAME.DAT and INFO.DAT will still be in this folder in case there is an issue.
 
