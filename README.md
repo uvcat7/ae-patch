@@ -1,7 +1,7 @@
 # ae-patch
 Basic graphics modding framework for Tetris The Grandmaster 4: Absolute Eye.
 
-The framework is still work-in-progress, but any graphic can be changed. (You will have to use a hex editor for some files at the moment.
+The framework is still work-in-progress, but any graphic can be changed. (You will have to use a hex editor for some files at the moment.)
 
 # Requirements
 Python 3 is required. The `pylzss` package is needed:
