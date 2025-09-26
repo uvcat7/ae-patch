@@ -1,12 +1,15 @@
 # ae-patch
 Basic graphics modding framework for Tetris The Grandmaster 4: Absolute Eye.
 
-The framework is still work-in-progress, but any graphic can be changed. (You will have to use a hex editor for some files at the moment.
+The framework is still work-in-progress, but any graphic can be changed, as long as the resolution and format of the changed graphics are the same.
 
 # Requirements
 Python 3 is required. The `pylzss` package is needed:
 
 `python3 -m pip install pylzss`
+
+Optionally, the `Wand` library and [ImageMagick](https://imagemagick.org/script/download.php#windows) binaries are needed if you want the .dds files to be converted to .png when extracting game files:
+`python3 -m pip install Wand`
 
 TGM4 is a Windows-only game, so these scripts assume you are using Windows.
 
@@ -20,7 +23,7 @@ The graphics data is stored in three main file types:
 * .eff: these are the animation files, hence the extension's name ("effects"). These contain a set of graphics files used to build an animation, as well as a list of animation types and rendering information.
 * .mdl: these are a list of modeling files, with a set of vertex information (.vwx) that ties a set of textures (.twx/.txs) files together.
 
-The .txs ("TeXtureSet"?) file type contains a list of textures but doesn't include the .twx files in the format.
+The .txs ("TeXtureSet"?) file type contains a list of textures but doesn't include the .twx files in the format unless the set is inside a .mdl or .eff file.
 
 
 # Instructions
@@ -35,18 +38,11 @@ The .twx files will be extracted to /images in .dds format, keeping their approp
 
 The .twx files in .eff and .mdl files will be extracted to /dataeff, with their .eff/.mdl file included as part of the path. Then they will be extracted to /imageseff in .dds format.
 
-## 03_Export_Twx_Only.py
-Now, modify whatever .dds files in the /images folder you'd like to modify.
+## 03_Patch_Textures.py
+Now, modify whatever .dds files in the /images or /imageseff folder you'd like.
 
-Once you want to patch the game, run this script. It will build all the .twx files from the .dds files and copy them to the /datapatch folder, keeping the existing file structre.
-This folder will then be used to patch *any* file in the game, not just .twx files.
-
-To modify the graphics in the .twx and .mdl files, you'll need a hex editor. Handily, the .dds file is not compressed in the .eff/.mdl file so this process should always work:
-* Find the name of the texture file in the .eff/.mdl file. This will be in a table at the beginning.
-* Go to the offset specified in 0x18-0x1B, where 0x0 is the beginning of the file name. Keep in mind the data is little-endian.
-  * You'll know the address is correct if the first four bytes starting from the address are `TWX0`.
-* Copy the data starting from 0x80 in the .dds file to the data starting from 0x30 of the .twx file.
-* Then copy the modified .mdl/.eff file to its appropriate path in the /datapatch folder.
+Once you want to patch the game, run this script. It will build all the .twx, .eff, and .mdl files from the .dds files and copy them to the /datapatch folder, keeping the existing file structre.
+This folder can be used to patch *any* file in the game, not just graphics files.
 
 ## 04_Rebuild_Dat.py
 This file will rebuild GAME_PATCH.DAT and INFO_PATCH.DAT, using only the /data and /datapatch folders.

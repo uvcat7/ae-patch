@@ -1,4 +1,10 @@
 import glob, struct, os
+try:
+    from wand import image
+    png_support = True
+except:
+    png_support = False
+    print("Install ImageMagick, if you have not already.")
 
 formats = {
     0x00: "P8",
@@ -34,10 +40,15 @@ for file in eff_files:
             offset = 0x20 + (entry * 0x20)
             (fname, fsize, foffset) = struct.unpack("<16sxxxxLLxxxx", data[offset:offset + 0x20])
             fname = str(fname, "utf-8").rstrip("\0")
+            if (fname.endswith(".txs")):
+                (txs_entries, txs_hdrsize) = struct.unpack("<xxxxxxHxxxxxxxxH", data[foffset:foffset+18])
+                (tname, tsize, toffset) = struct.unpack("<16sxxxxLLxxxx", data[foffset + 0x20 * txs_entries:foffset + 0x20 * (txs_entries + 1)])
+                fsize = toffset + tsize # the fsize only contains the .txs header size; calculate the correct size
+                #print(f"Got a .txs file {fname} with size {fsize}")
             if "\\" in file: file = file.replace("\\", "/")
             new_f = (file + "/" + fname).replace("data/", "dataeff/").replace(".tmp", "")
             print(f"\t{new_f} ({fsize} bytes)")
-            if (new_f.endswith(".mdl") or new_f.endswith(".eff")):
+            if (new_f.endswith(".mdl") or new_f.endswith(".eff") or new_f.endswith(".txs")):
                 new_f = new_f + ".tmp"
                 #print(f"Trying to recurse this file: {new_f}")
                 eff_files.append(new_f)
@@ -62,3 +73,19 @@ for file in twx_files:
         with open(new_f, "wb") as of:
             of.write(header)
             of.write(data[0x30:])
+
+if png_support:
+    print("Converting images to .png, this will take several minutes... (stop script if you don't care about these)")
+    dds_files = glob.glob("images/**/*.dds", recursive=True)
+    dds_files.extend(glob.glob("imageseff/**/*.dds", recursive=True))
+    for file in dds_files:
+        if "\\" in file: file = file.replace("\\", "/")
+        png_file = file.replace("images/", "png/").replace("imageseff/", "png/").replace(".dds", ".png")
+        #print(f"Converting {file} to {png_file}")
+        try:
+            with image.Image(filename=file) as img:
+                img.compression = "no"
+                os.makedirs(os.path.dirname(png_file), exist_ok=True)
+                img.save(filename=png_file)
+        except:
+            print(f"ImageMagick doesn't support the .dds format for {file}")
