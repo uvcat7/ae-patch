@@ -9,6 +9,7 @@ Python 3 is required. The `pylzss` package is needed:
 `python3 -m pip install pylzss`
 
 Optionally, the `Wand` library and [ImageMagick](https://imagemagick.org/script/download.php#windows) binaries are needed if you want the .dds files to be converted to .png when extracting game files:
+
 `python3 -m pip install Wand`
 
 TGM4 is a Windows-only game, so these scripts assume you are using Windows.
