@@ -29,8 +29,16 @@ filelist = []
 file_count = 0
 block_count = 0
 
-shutil.copy("C:\Program Files (x86)\Steam\steamapps\common\TGM4\GAME.DAT", "GAME.DAT")
-shutil.copy("C:\Program Files (x86)\Steam\steamapps\common\TGM4\INFO.DAT", "INFO.DAT")
+if os.name == "nt":
+    shutil.copy("C:\Program Files (x86)\Steam\steamapps\common\TGM4\GAME.DAT", "GAME.DAT")
+    shutil.copy("C:\Program Files (x86)\Steam\steamapps\common\TGM4\INFO.DAT", "INFO.DAT")
+elif os.name == "posix":
+    try:
+        shutil.copy(str(Path.home()) + "/.local/share/Steam/steamapps/common/TGM4/GAME.DAT", "GAME.DAT")
+        shutil.copy(str(Path.home()) + "/.local/share/Steam/steamapps/common/TGM4/INFO.DAT", "INFO.DAT")
+    except FileNotFoundError:
+        shutil.copy(str(Path.home()) + "/Library/Application Support/Steam/steamapps/common/TGM4/GAME.DAT", "GAME.DAT")
+        shutil.copy(str(Path.home()) + "/Library/Application Support/Steam/steamapps/common/TGM4/INFO.DAT", "INFO.DAT")
 
 with (open("INFO.DAT", mode='rb') as bin_file):
     fileContent = bin_file.read()
