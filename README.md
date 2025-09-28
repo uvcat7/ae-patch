@@ -4,7 +4,7 @@ Basic graphics modding framework for Tetris The Grandmaster 4: Absolute Eye.
 The framework is still work-in-progress, but any graphic can be changed, as long as the resolution and format of the changed graphics are the same.
 
 # Requirements
-Python 3 is required. The `pylzss` package is needed:
+Python 3 is required. The `pylzss` package is needed, and prebuilt binaries are only available for [Python 3.12](https://www.python.org/downloads/release/python-31210/) and below. If you have Python 3.13+, you will need Microsoft's [Visual C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) for pip to build it. Once you are set up, run:
 
 `python -m pip install pylzss`
 
